@@ -34,11 +34,6 @@ public class ResourceHandlers extends WebMvcConfigurerAdapter {
     @Value("${video.MappingUrl}")
     private String videoMappingUrl;
 
-    @Value("${banner.MappingPath}")
-    private String bannerMappingPath;
-
-    @Value("${banner.MappingUrl}")
-    private String bannerMappingUrl;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -46,13 +41,11 @@ public class ResourceHandlers extends WebMvcConfigurerAdapter {
         String[] staticImageMappingPath = { "file:///"+imageMappingPath };
         String[] staticAudioMappingPath = { "file:///"+audioMappingPath };
         String[] staticVideoMappingPath = { "file:///"+videoMappingPath };
-        String[] staticBannerMappingPath = { "file:///"+bannerMappingPath };
         String[] staticWebMappingPath = { "/"};
         registry.addResourceHandler(fileMappingUrl+"**").addResourceLocations(staticFileMappingPath);
         registry.addResourceHandler(imageMappingUrl+"**").addResourceLocations(staticImageMappingPath);
         registry.addResourceHandler(audioMappingUrl+"**").addResourceLocations(staticAudioMappingPath);
         registry.addResourceHandler(videoMappingUrl+"**").addResourceLocations(staticVideoMappingPath);
-        registry.addResourceHandler(bannerMappingUrl+"**").addResourceLocations(staticBannerMappingPath);
         registry.addResourceHandler("/**").addResourceLocations(staticWebMappingPath);
         super.addResourceHandlers(registry);
     }
