@@ -4,9 +4,6 @@
 .icon-add{
 	background:url('icons/edit_add.png') no-repeat center center;
 }
-.icon-view{
-	background:url('icons/view.png') no-repeat center center;
-}
 .icon-edit{
 	background:url('icons/pencil.png') no-repeat center center;
 }
@@ -70,20 +67,6 @@
 .icon-more{
 	background:url('icons/more.png') no-repeat center center;
 }
-
-.icon-file{
-    background:url('icons/file.png') no-repeat center center;
-}
-.icon-picture{
-    background:url('icons/picture.png') no-repeat center center;
-}
-.icon-audio{
-    background:url('icons/audio.png') no-repeat center center;
-}
-.icon-video{
-    background:url('icons/video.png') no-repeat center center;
-}
-
 
 
 .icon-mini-add{
