@@ -1,6 +1,8 @@
 package stock.rest;
 
+import stock.dao.eventDao;
 import stock.dao.staffDao;
+import stock.model.AlertWord;
 import stock.model.ResponseObject;
 import stock.model.Staff;
 
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.sql.SQLException;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -49,7 +52,9 @@ public class webServices {
     @Autowired
     private staffDao staffDaoImp;
 
-    //region Staff
+    @Autowired
+    private eventDao eventDaoImp;
+
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ResponseObject login(@RequestParam(value = "sid") String sid,
                                 @RequestParam(value = "password") String password) {
@@ -67,5 +72,17 @@ public class webServices {
             return new ResponseObject("error", "系统错误，请联系系统管理员");
         }
     }
-    //endregion
+
+    @RequestMapping(value = "/getAlertWords", method = RequestMethod.GET)
+    public ResponseObject getAlertWords() {
+
+        try {
+            List<AlertWord> items = eventDaoImp.getAlertWords();
+            return new ResponseObject("ok", "查询成功", items);
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            return new ResponseObject("error", "系统错误，请联系系统管理员");
+        }
+    }
+
 }

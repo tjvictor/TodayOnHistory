@@ -29,14 +29,39 @@ function logout(){
 }
 
 function getAlertWord(){
-    callAjax('/websiteService/getAlertWord', '', 'getAlertWordCallback', '', '', '', '');
+    callAjax('/websiteService/getAlertWords', '', 'getAlertWordsCallback', '', '', '', '');
 }
-function getAlertWordCallback(data){
-    if (data.status == "ok") {
+function getAlertWordsCallback(data) {
+    if (data.status == "ok" && data.callBackData.length>0) {
+        $('.mainAlert').html('');
         var items = data.callBackData;
-        if(items.length > 0){
-            $('.mainAlert').html('');
+        var template = '<div>';
+        for (var i = 0; i < items.length; i++) {
+            template += '<p >' + items[i].content + '</p>';
         }
+        template += '</div>';
+        $('.mainAlert').html(template);
+        $('.mainAlert div').css('height', (0.5 * 4) + 'rem');
+
+        rollAlertWord(0.5, 0, items.length-1);
 
     }
+}
+function rollAlertWord(height, cur, max) {
+    var position = "-" + (cur * height) + "rem";
+    if (cur == max) {
+        cur = 0;
+    } else {
+        cur++;
+    }
+    $('.mainAlert div').animate({
+        top: position
+    },
+    1000,
+    function() {
+        setTimeout(function() {
+            rollAlertWord(height, cur, max)
+        },
+        5000);
+    });
 }

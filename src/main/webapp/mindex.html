@@ -24,27 +24,8 @@
             var user = jQuery.parseJSON(Cookies.get("user"));
             $('#dateSpan').text("历史上的今天: "+showToday());
 
-            $('.mainAlert').html('');
-            var template = '<div>';
-            for(var i = 0 ; i < 4 ; i++){
-                template += '<p >历史上的今天: '+i+'</p>';
-            }
-            template += '</div>';
-            $('.mainAlert').html(template);
-            $('.mainAlert div').css('height',(0.5*4)+'rem');
-
-            rollAlertWord(0.5, 0, 3);
+            getAlertWord();
         });
-
-        function rollAlertWord(height, cur, max){
-            var position = "-"+(cur*height)+"rem";
-            if(cur == max){
-                cur = 0;
-            }else{
-                cur++;
-            }
-            $('.mainAlert div').animate({top:position}, 1000, function(){setTimeout(function(){rollAlertWord(height, cur, max)}, 5000);});
-        }
     </script>
 </head>
 <body>
@@ -58,7 +39,7 @@
         <div class="clear"></div>
     </div>
     <div class="mainAlert">
-        <span>警钟长鸣: 没有准确消息，绝对不能追高。</span>
+        <span>警钟长鸣: 没有准确消息，绝对不能追高!!!。</span>
     </div>
 </body>
 </html>
