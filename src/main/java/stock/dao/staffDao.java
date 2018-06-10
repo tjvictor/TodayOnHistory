@@ -6,4 +6,5 @@ import java.sql.SQLException;
 
 public interface staffDao {
     Staff login(String sid, String password) throws SQLException;
+
 }

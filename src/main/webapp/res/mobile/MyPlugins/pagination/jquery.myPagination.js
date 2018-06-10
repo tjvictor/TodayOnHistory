@@ -3,6 +3,7 @@
     var MobilePagination = function(ele, opt) {
         this.$element = ele,
         this.$element.removeClass();
+        this.$element.html('');
         this.defaults = {
             pageNumber: 1,
             pageSize: 10,
@@ -58,7 +59,7 @@
 
     };
 
-    $.fn.pagination = function(opt) {
+    $.fn.mobilePagination = function(opt) {
         var paginationObj = new MobilePagination(this, opt);
         paginationObj.createPagination();
         this.data('paginationObj', paginationObj);

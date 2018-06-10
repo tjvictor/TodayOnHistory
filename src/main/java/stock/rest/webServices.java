@@ -3,6 +3,7 @@ package stock.rest;
 import stock.dao.eventDao;
 import stock.dao.staffDao;
 import stock.model.AlertWord;
+import stock.model.Event;
 import stock.model.ResponseObject;
 import stock.model.Staff;
 
@@ -84,5 +85,32 @@ public class webServices {
             return new ResponseObject("error", "系统错误，请联系系统管理员");
         }
     }
+
+    @RequestMapping(value = "/getEventsByDate", method = RequestMethod.GET)
+    public ResponseObject getEventsByDate(@RequestParam(value = "date", defaultValue = "", required = false) String date,
+                                          @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+                                          @RequestParam(value = "pageSize", defaultValue = "0", required = false) int pageSize) {
+
+        try {
+            List<Event> items = eventDaoImp.getEventsByDate(date, pageNumber, pageSize);
+            return new ResponseObject("ok", "查询成功", items);
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            return new ResponseObject("error", "系统错误，请联系系统管理员");
+        }
+    }
+
+    @RequestMapping(value = "/getEventsTotalCountByDate", method = RequestMethod.GET)
+    public ResponseObject getEventsTotalCountByDate(@RequestParam(value = "date") String date) {
+
+        try {
+            int totalCount = eventDaoImp.getEventsTotalCountByDate(date);
+            return new ResponseObject("ok", "查询成功", totalCount);
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            return new ResponseObject("error", "系统错误，请联系系统管理员");
+        }
+    }
+
 
 }
