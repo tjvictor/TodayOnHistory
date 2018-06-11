@@ -7,11 +7,11 @@
 	margin:0.1rem 0;
 }
 
-.pagination_nextPage ul {
+.myPagination_nextPage ul {
      display: inline-block;
 }
 
-.pagination_nextPage ul li{
+.myPagination_nextPage ul li{
     display: inline-block;
     vertical-align: middle;
     margin-left:0.1rem;

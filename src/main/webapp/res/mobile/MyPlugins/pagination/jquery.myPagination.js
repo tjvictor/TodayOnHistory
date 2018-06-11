@@ -17,30 +17,30 @@
 
     MobilePagination.prototype = {
         createPagination: function() {
-            var content = '<div class="pagination_nextPage"><span>' + '1 / ' + this.options.totalPage + '下一页</span><ul><li></li></ul></div>';
+            var content = '<div class="myPagination_nextPage"><span>' + '1 / ' + this.options.totalPage + '下一页</span><ul><li></li></ul></div>';
             content += '<div class="pagination_loading" style="display:none;">加载中...</div>';
             if (this.options.pageNumber < this.options.totalPage) {
                 this.$element.addClass('myPagination');
                 this.$element.html(content);
             }
 
-            this.$element.find('.pagination_nextPage').off("click");
-            this.$element.find('.pagination_nextPage').on("click", this,
+            this.$element.find('.myPagination_nextPage').off("click");
+            this.$element.find('.myPagination_nextPage').on("click", this,
             function(event) {
-                event.data.$element.find('.pagination_nextPage').css('display', 'none');
+                event.data.$element.find('.myPagination_nextPage').css('display', 'none');
                 event.data.$element.find('.pagination_loading').css('display', 'block');
-                event.data.options.onSelectPage(event.data.options.pageNumber+1, event.data.options.pageSize);
+                event.data.options.onSelectPage(event.data.options.pageNumber, event.data.options.pageSize);
             });
         },
 
         nextPage: function() {
-            this.options.pageNumber++;
             if (this.options.pageNumber >= this.options.totalPage) {
                 this.dispose();
             } else {
-                this.$element.find('.pagination_nextPage').css('display', 'block');
-                this.$element.find('.pagination_nextPage span').text(this.options.pageNumber + ' / ' + this.options.totalPage + ' 下一页');
+                this.$element.find('.myPagination_nextPage').css('display', 'block');
+                this.$element.find('.myPagination_nextPage span').text(this.options.pageNumber + ' / ' + this.options.totalPage + ' 下一页');
                 this.$element.find('.pagination_loading').css('display', 'none');
+                this.options.pageNumber++;
             }
         },
 

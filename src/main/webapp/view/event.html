@@ -1,0 +1,100 @@
+<script>
+    $(function (){
+        $.parser.parse('#mgtContentDiv');
+        initEventKindeditor();
+    });
+
+</script>
+<div id="mgtContentDiv">
+    <table id="eventView" class="easyui-datagrid" style="width:100%;height:auto"
+           data-options="
+				iconCls: 'icon-edit',
+				singleSelect: true,
+				toolbar: '#eventViewTool',
+                singleSelect:true,
+                idField: 'id',
+			">
+        <thead>
+        <tr>
+            <th data-options="field:'id',hidden:true,width:80">Id</th>
+            <th data-options="field:'title',width:300">标题</th>
+            <th data-options="field:'date',width:100">日期</th>
+        </tr>
+        </thead>
+    </table>
+    <div id="eventViewTool" style="height:auto">
+        <div style="float:left;">
+            <span style="font-size:1rem">标题</span>
+            <input id="st_tool_titleTxt" class="easyui-textbox" style="width:100px;">
+        </div>
+        <div class="datagrid-btn-separator" style="margin-left:20px"></div>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true"
+           onclick="eventSearch(1, 10)">查询</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"
+           onclick="openEventPanel('add')">新增事件</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true"
+           onclick="openEventPanel('edit')">编辑事件</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true"
+           onclick="deleteEvent()">删除事件</a>
+    </div>
+    <div id="eventPagination" class="easyui-pagination"
+         style="background:#efefef;border:1px solid #ccc;margin-top:10px;"
+         data-options="total:0,pageSize:10,showRefresh:false,showPageList:false,onSelectPage:function(pageNumber, pageSize){ eventSearch(pageNumber, pageSize);;}">
+    </div>
+    <div id="eventUpdateView" class="easyui-dialog" title="编辑事件"
+         style="width:1000px;height:600px;display:none;padding:10px;"
+         data-options="iconCls:'icon-save',resizable:false,modal:true,closed:true, buttons:'#eventButtonDiv'">
+        <table style="width:100%">
+            <tr>
+                <td style="width:8%">标题:</td>
+                <td style="width:77%">
+                    <input id="e_titleTxt" class="easyui-textbox" data-options="required:true" style="width:100%">
+                </td>
+                <td style="width:15%;">
+                    <input id="e_fileUploader" name="e_fileUploader" type="file" style="display:none;"
+                           onchange="kindeditorFileUploading('e_fileUploader', notifyKindeditor);">
+                    <label for="e_fileUploader" style="cursor:pointer;margin-left:5px"
+                           onclick="setFileUploadType('file')"><img src="../res/img/file-icon.png" title="插入文件"></label>
+                    <label for="e_fileUploader" style="cursor:pointer;margin-left:5px"
+                           onclick="setFileUploadType('image')"><img src="../res/img/picture-icon.png"
+                                                                     title="插入图片"></label>
+                    <label for="e_fileUploader" style="cursor:pointer;" onclick="setFileUploadType('audio')"><img
+                            src="../res/img/audio-icon.png" title="插入音频"></label>
+                    <label for="e_fileUploader" style="cursor:pointer;" onclick="setFileUploadType('video')"><img
+                            src="../res/img/video-icon.png" title="插入视频"></label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div class="left" style="width:20%">指定日期: <input id="e_dateTxt" class="easyui-textbox" data-options="required:false"></div>
+                    <div class="left" style="width:20%">分类: <input id="e_categoryTxt" class="easyui-textbox" data-options="required:false"></div>
+                    <div class="left" style="width:20%">地点: <input id="e_locationTxt" class="easyui-textbox" data-options="required:false"></div>
+                    <div class="left" style="width:20%">股票代码: <input id="e_stockTxt" class="easyui-textbox" data-options="required:false"></div>
+                    <div class="left" style="width:20%">标签: <input id="e_tagTxt" class="easyui-textbox" data-options="required:false"></div>
+                    <div class="clear"></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div class="splitLine"></div>
+                    <textarea id="e_contentTxt" name="e_contentTxt" style="width:100%;"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <input id="e_idTxt" type="text" style="display:none">
+                    <input id="e_creatorIdTxt" type="text" style="display:none">
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="eventButtonDiv">
+        <div id="addEventBtn" class="easyui-linkbutton right" data-options="iconCls:'icon-add'"
+             onclick="addEvent()">增加事件
+        </div>
+        <div id="updateEventBtn" class="easyui-linkbutton right" data-options="iconCls:'icon-edit'"
+             onclick="updateEvent()">修改事件信息
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>

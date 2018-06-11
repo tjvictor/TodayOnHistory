@@ -3,6 +3,7 @@ package stock.model;
 public class Staff {
     private String id;
     private String sid;
+    private String name;
     private String password;
     private String roleId;
 
@@ -36,5 +37,13 @@ public class Staff {
 
     public void setRoleId(String roleId) {
         this.roleId = roleId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

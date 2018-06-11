@@ -72,7 +72,7 @@ function getEventsTotalCountByDate(){
     var day = date.getDate();
     var dateString = date.getFullYear() + "-" + (month<10?"0"+month:month) + "-" + (day<10?"0"+day:day);
     var param = 'date='+dateString;
-    callAjax('/websiteService/getEventsTotalCountByDate', '', 'getEventsTotalCountByDateCallback', '', '', param, '');
+    callAjax('/websiteService/getEventsTotalCount', '', 'getEventsTotalCountByDateCallback', '', '', param, '', false);
 }
 function getEventsTotalCountByDateCallback(data){
     if (data.status == "ok") {
@@ -91,7 +91,7 @@ function getEventsByDate(pageNumber, pageSize){
     if(pageNumber===1){
         $('.mainEventView').html('');
     }
-    callAjax('/websiteService/getEventsByDate', '', 'getEventsByDateCallback', '', '', param, '');
+    callAjax('/websiteService/getEvents', '', 'getEventsByDateCallback', '', '', param, '');
 }
 function getEventsByDateCallback(data){
     if (data.status == "ok" && data.callBackData.length>0){
@@ -100,7 +100,7 @@ function getEventsByDateCallback(data){
         for(var index = 0 ; index < items.length ; index++){
             var item = items[index];
             template += '<div style="width:100%;height:auto;padding:0.1rem;border-bottom: 1px dashed #4682B4;">';
-            template += '<div class="left" style="width:70%"><a href="mobileView/showDocument.html?page=wiki&id=' + item.id + '" target="_blank"><p style="text-overflow:ellipsis;width:100%;overflow:hidden;white-space:nowrap;">' + item.title + '</p></a></div>';
+            template += '<div class="left" style="width:70%"><a href="mobileView/eventShow.html?eventId=' + item.id + '" target="_blank"><p style="text-overflow:ellipsis;width:100%;overflow:hidden;white-space:nowrap;">' + item.title + '</p></a></div>';
             template += '<div class="right" style="width:30%;text-align:right;">' + item.date + '</div>';
             template += '<div class="clear"></div></div>';
         }
@@ -110,5 +110,28 @@ function getEventsByDateCallback(data){
         }
     } else{
         $('.mainEventView').html('');
+    }
+}
+
+function getEventById(eventId){
+    callAjax('/websiteService/getEventById', '', 'getEventByIdCallback', '', '', eventId, '');
+}
+function getEventByIdCallback(data){
+    if (data.status == "ok") {
+        var item = data.callBackData;
+        var style = '<style>.notificationStyle{background-color:white;border-radius:0.1rem;} .notificationStyle h1{text-align:center;font-size: 0.4rem;padding:0.1rem;} .notificationStyle p, .notificationStyle span, .notificationStyle div{font-size:0.24rem;padding:0.1rem;} </style>';
+        var wrapperPrefix = '<div class="notificationStyle">';
+        var wrapperSuffix = '</div>';
+        var title = '<h1>'+item.title+'</h1>';
+        var author = '<p style="text-align:center;font-size: 0.2rem;padding:0;">编辑: '+item.creator+'</p>';
+        author += '<p style="text-align:center;font-size: 0.2rem;padding:0;">时间: '+item.date+'</p>';
+        var content = item.content;
+        var split = '<div class="splitLine"></div>';
+        var others = '<p style="text-align:left;font-size: 0.2rem;padding:0;">分类: '+item.category+'</p>';;
+        others += '<p style="text-align:left;font-size: 0.2rem;padding:0;">分类: '+item.category+'</p>';;
+        others += '<p style="text-align:left;font-size: 0.2rem;padding:0;">地点: '+item.location+'</p>';;
+        others += '<p style="text-align:left;font-size: 0.2rem;padding:0;">相关股票: '+item.stockCode+'</p>';;
+        others += '<p style="text-align:left;font-size: 0.2rem;padding:0;">标签: '+item.tag+'</p>';;
+        $('#mainDiv').html(style+wrapperPrefix+title+author+content+split+others+wrapperSuffix);
     }
 }

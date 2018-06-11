@@ -16,7 +16,7 @@ public class staffDaoImp extends BaseDao implements staffDao {
     public Staff login(String sid, String password) throws SQLException {
         Staff item = new Staff();
 
-        String selectSql = String.format("SELECT a.Id, a.Sid, a.Password, a.RoleId FROM Staff a where a.Sid = '%s' and a.Password= '%s' ", sid, password);
+        String selectSql = String.format("SELECT a.Id, a.Sid, a.Name, a.Password, a.RoleId FROM Staff a where a.Sid = '%s' and a.Password= '%s' ", sid, password);
 
         try (Connection connection = DriverManager.getConnection(dbConnectString)) {
             try (Statement stmt = connection.createStatement()) {
@@ -25,6 +25,7 @@ public class staffDaoImp extends BaseDao implements staffDao {
                         int i = 1;
                         item.setId(rs.getString(i++));
                         item.setSid(rs.getString(i++));
+                        item.setName(rs.getString(i++));
                         item.setPassword(rs.getString(i++));
                         item.setRoleId(rs.getString(i++));
                     }

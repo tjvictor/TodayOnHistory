@@ -6,6 +6,8 @@ public class Event {
     private String title;
     private String content;
     private String date;
+    private String creatorId;
+    private String creator;
     private String category;
     private String location;
     private String stockCode;
@@ -73,5 +75,21 @@ public class Event {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
     }
 }

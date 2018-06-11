@@ -1,0 +1,48 @@
+<script>
+    $(function (){
+        $.parser.parse('#mgtContentDiv');
+    });
+
+</script>
+<div id="mgtContentDiv">
+    <table id="alertView" class="easyui-datagrid" style="width:100%;height:auto"
+           data-options="
+				iconCls: 'icon-edit',
+				singleSelect: true,
+				toolbar: '#alertViewTool',
+                singleSelect:true,
+                idField: 'id',
+			">
+        <thead>
+        <tr>
+            <th data-options="field:'id',hidden:true,width:80">Id</th>
+            <th data-options="field:'content',width:600">警示</th>
+        </tr>
+        </thead>
+    </table>
+    <div id="alertViewTool" style="height:auto">
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true"
+           onclick="alertSearch()">查询</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true"
+           onclick="openAlertPanel('add')">新增警示</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true"
+           onclick="openAlertPanel('edit')">编辑警示</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true"
+           onclick="deleteAlert()">删除警示</a>
+    </div>
+    <input id="a_id" type="hidden">
+    <div id="alertUpdateView" class="easyui-dialog" title="编辑警示"
+         style="width:300px;height:320px;display:none;padding:10px;"
+         data-options="iconCls:'icon-save',resizable:false,modal:true,closed:true, buttons:'#alertButtonDiv'">
+        <textarea id="a_contentTxt" name="a_contentTxt" style="width:100%;height:200px;resize: none;"></textarea>
+    </div>
+    <div id="alertButtonDiv">
+        <div id="addAlertBtn" class="easyui-linkbutton right" data-options="iconCls:'icon-add'"
+             onclick="addAlertWord()">增加警示
+        </div>
+        <div id="updateAlertBtn" class="easyui-linkbutton right" data-options="iconCls:'icon-edit'"
+             onclick="updateAlertWord()">修改警示信息
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
