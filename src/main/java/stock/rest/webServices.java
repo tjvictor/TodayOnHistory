@@ -176,7 +176,7 @@ public class webServices {
 
     @RequestMapping(value = "/addEvent", method = RequestMethod.POST)
     public ResponseObject addEvent(@FormParam("title") String title, @FormParam("content") String content,
-                                   @FormParam("createId") String createId, @FormParam("date") String date,
+                                   @FormParam("creatorId") String creatorId, @FormParam("date") String date,
                                    @FormParam("category") String category, @FormParam("location") String location,
                                    @FormParam("stockCode") String stockCode, @FormParam("tag") String tag) {
 
@@ -185,7 +185,7 @@ public class webServices {
         item.setId(id);
         item.setTitle(title);
         item.setContent(content);
-        item.setCreatorId(createId);
+        item.setCreatorId(creatorId);
         item.setDate(date);
         item.setCategory(category);
         item.setLocation(location);
@@ -204,7 +204,7 @@ public class webServices {
     @RequestMapping(value = "/updateEvent", method = RequestMethod.POST)
     public ResponseObject updateEvent(@FormParam("id") String id,
                                       @FormParam("title") String title, @FormParam("content") String content,
-                                      @FormParam("createId") String createId, @FormParam("date") String date,
+                                      @FormParam("creatorId") String creatorId, @FormParam("date") String date,
                                       @FormParam("category") String category, @FormParam("location") String location,
                                       @FormParam("stockCode") String stockCode, @FormParam("tag") String tag) {
 
@@ -213,7 +213,7 @@ public class webServices {
         item.setId(id);
         item.setTitle(title);
         item.setContent(content);
-        item.setCreatorId(createId);
+        item.setCreatorId(creatorId);
         item.setDate(date);
         item.setCategory(category);
         item.setLocation(location);

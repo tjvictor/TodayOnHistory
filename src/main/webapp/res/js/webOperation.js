@@ -17,7 +17,8 @@ function loginCallback(data){
             return;
         }
         var user = {
-            "id" : data.callBackData.sid,
+            "id" : data.callBackData.id,
+            "sid" : data.callBackData.sid,
             "name" : data.callBackData.name,
             "roleId": data.callBackData.roleId,
         }
@@ -193,7 +194,7 @@ function updateAlertWordCallback(data){
     }
 }
 function deleteAlertWord(){
-    var row = $('#alertUpdateView').datagrid('getSelected');
+    var row = $('#alertView').datagrid('getSelected');
     if(row){
         $.messager.confirm('删除警示', '确认删除警示吗?',
             function(result) {
@@ -292,21 +293,23 @@ function openEventPanel(mode){
             $('#e_dateTxt').textbox('setValue', row.date);
             $('#e_categoryTxt').textbox('setValue', row.category);
             $('#e_stockTxt').textbox('setValue', row.stockCode);
+            $('#e_locationTxt').textbox('setValue', row.location);
             $('#e_tagTxt').textbox('setValue', row.tag);
             $('#addEventBtn').css('display','none');
         }
     }
 }
-function addEventWord(){
+function addEvent(){
+    var user = jQuery.parseJSON(Cookies.get("user"));
     var postValue = {
-        "title": $('#e_titleTxt').text('getValue'),
+        "title": $('#e_titleTxt').textbox('getValue'),
         "content": eventKindeditor.html(),
-        "creatorId": $('#e_creatorIdTxt').val(),
-        "date": $('#e_dateTxt').text('getValue'),
-        "category": $('#e_categoryTxt').text('getValue'),
-        "location": $('#e_categoryTxt').text('getValue'),
-        "stockCode": $('#e_stockTxt').text('getValue'),
-        "tag": $('#e_tagTxt').text('getValue'),
+        "creatorId": user.id,
+        "date": $('#e_dateTxt').textbox('getValue'),
+        "category": $('#e_categoryTxt').textbox('getValue'),
+        "location": $('#e_locationTxt').textbox('getValue'),
+        "stockCode": $('#e_stockTxt').textbox('getValue'),
+        "tag": $('#e_tagTxt').textbox('getValue'),
     };
 
     callAjax('/websiteService/addEvent', '', 'addEventCallback', '', 'POST', postValue, '');
@@ -322,17 +325,17 @@ function addEventCallback(data){
         $('#eventUpdateView').dialog('close');
     }
 }
-function updateEventWord(){
+function updateEvent(){
     var postValue = {
         "id": $('#e_idTxt').val(),
-        "title": $('#e_titleTxt').text('getValue'),
+        "title": $('#e_titleTxt').textbox('getValue'),
         "content": eventKindeditor.html(),
         "creatorId": $('#e_creatorIdTxt').val(),
-        "date": $('#e_dateTxt').text('getValue'),
-        "category": $('#e_categoryTxt').text('getValue'),
-        "location": $('#e_categoryTxt').text('getValue'),
-        "stockCode": $('#e_stockTxt').text('getValue'),
-        "tag": $('#e_tagTxt').text('getValue'),
+        "date": $('#e_dateTxt').textbox('getValue'),
+        "category": $('#e_categoryTxt').textbox('getValue'),
+        "location": $('#e_locationTxt').textbox('getValue'),
+        "stockCode": $('#e_stockTxt').textbox('getValue'),
+        "tag": $('#e_tagTxt').textbox('getValue'),
     };
 
     callAjax('/websiteService/updateEvent', '', 'updateEventCallback', '', 'POST', postValue, '');
@@ -350,9 +353,9 @@ function updateEventCallback(data){
     }
 }
 function deleteEvent(){
-    var row = $('#eventUpdateView').datagrid('getSelected');
+    var row = $('#eventView').datagrid('getSelected');
     if(row){
-        $.messager.confirm('删除警示', '确认删除警示吗?',
+        $.messager.confirm('删除警示', '确认删除吗?',
             function(result) {
                 if (result) {
                     callAjax('/websiteService/deleteEvent', '', 'deleteEventCallback', '', '', 'id='+row.id, '');
