@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>成本计算</title>
+    <link rel="icon" href="../res/img/favicon.png" type="image/png" >
+    <link rel="stylesheet" href="../res/mobile/css/mobilePublic.css"/>
+    <script type="text/javascript" src="../res/js/jquery-3.0.0.min.js"></script>
+    <meta name="viewport"
+          content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style>
+        .tab{
+            width:100%;
+            height:auto;
+            text-align:center;
+            padding:0;
+            border: 1px solid black;
+        }
+        .tabSelected{
+            background-color: black;
+            color: white;
+            border: 1px solid black;
+        }
+        .rate{
+            width:100%;
+            height:auto;
+            text-align:left;
+            padding:0.2rem;
+        }
+        .deal{
+            width:100%;
+            height:0.4rem;
+            line-height:0.4rem;
+            text-align:left;
+            padding:0 0.2rem;
+
+        }
+        .bs{
+            height:auto;
+            text-align:center;
+            padding:0;
+            border: 1px solid black;
+        }
+        .bsSelected{
+            background-color: black;
+            color: white;
+            border: 1px solid black;
+        }
+    </style>
+    <script>
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    if(clientWidth>=640){
+                        docEl.style.fontSize = '100px';
+                    }else{
+                        docEl.style.fontSize = 100 * (clientWidth / 640) + 'px';
+                    }
+                };
+
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+
+        function tabSelect(obj, param){
+            $('.tab div').removeClass('tabSelected');
+            $(obj).addClass('tabSelected');
+            if(param == 'sz'){
+                $('#ghslTxt').attr('disabled','disabled');
+            }else{
+                $('#ghslTxt').removeAttr('disabled');
+            }
+        }
+        function bsSelect(obj, param){
+            $('.bs div').removeClass('bsSelected');
+            $(obj).addClass('bsSelected');
+            if(param == 'sell'){
+                $('#initPrice').css('display','display');
+            }else{
+                $('#initPrice').css('display','none');
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="tab">
+        <div style="width:50%;height:0.5rem;line-height:0.5rem;" class="left tabSelected" onclick="tabSelect(this, 'sh')">SH</div>
+        <div style="width:50%;height:0.5rem;line-height:0.5rem;" class="right" onclick="tabSelect(this, 'sz')">SZ</div>
+        <div class="clear"></div>
+    </div>
+    <div class="splitLine"></div>
+    <div class="rate">
+        <div class="yssl"><div class="left" style="width: 3rem;">印花税率(默认 1‰):</div><input id="ysslTxt" type="text" value="0.001" class="left"><div class="clear"></div></div>
+        <div class="sxfl"><div class="left" style="width: 3rem;">手续费率(默认 0.02‰):</div><input id="sxflTxt" type="text" value="0.0003"><div class="clear"></div></div>
+        <div class="ghsl"><div class="left" style="width: 3rem;">过户税率(默认 0.3‰):</div><input id="ghslTxt" type="text" value="0.00002"><div class="clear"></div></div>
+    </div>
+    <div class="splitLine"></div>
+    <div class="deal">
+        <div class="left" style="width:20%">成交价格:</div>
+        <div class="left" style="width:28%"><input id="priceTxt" type="text" style="width:100%"></div>
+        <div class="left" style="width:4%;height:0.1rem;"></div>
+        <div class="left" style="width:20%">成交数量:</div>
+        <div class="left" style="width:28%"><input id="quantityTxt" type="text" style="width:100%"></div>
+        <div class="clear"></div>
+    </div>
+    <div class="deal">
+        <div class="left bs" style="width:20%;">
+            <div style="width:50%;height:0.4rem;line-height:0.4rem;" class="left bsSelected" onclick="bsSelect(this, 'buy')">买</div>
+            <div style="width:50%;height:0.4rem;line-height:0.4rem;" class="right" onclick="bsSelect(this, 'sell')">卖</div>
+            <div class="clear"></div>
+        </div>
+        <div id="initPrice" class="left" style="width:60%">
+            <div class="left" style="width:40%"></div>
+            <div class="left" style="width:60%"></div>
+            <div class="clear"></div>
+        </div>
+        <div class="left" style="width:20%;"><input id="calcBtn" type="button" value="计算" onclick="calculate()"></div>
+        <div class="clear"></div>
+    </div>
+    <div class="splitLine"></div>
+</body>
+</html>
