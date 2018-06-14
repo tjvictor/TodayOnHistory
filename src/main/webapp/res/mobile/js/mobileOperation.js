@@ -68,6 +68,9 @@ function rollAlertWord(height, cur, max) {
 
 function getEventsTotalCountByDate(){
     var date = $('#eventCalendar').calendar('options').current;
+    if(!date){
+        date = new Date();
+    }
     var month = date.getMonth()+1;
     var day = date.getDate();
     var dateString = date.getFullYear() + "-" + (month<10?"0"+month:month) + "-" + (day<10?"0"+day:day);
@@ -84,6 +87,9 @@ function getEventsTotalCountByDateCallback(data){
 }
 function getEventsByDate(pageNumber, pageSize){
     var date = $('#eventCalendar').calendar('options').current;
+    if(!date){
+        date = new Date();
+    }
     var month = date.getMonth()+1;
     var day = date.getDate();
     var dateString = date.getFullYear() + "-" + (month<10?"0"+month:month) + "-" + (day<10?"0"+day:day);

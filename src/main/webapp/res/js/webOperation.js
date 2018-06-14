@@ -63,7 +63,6 @@ function setFileUploadType(type){
 }
 
 function kindeditorFileUploading(fileElementId, kindeditorId) {
-    $('.window-page-mask').css('display', 'block');
     $.ajaxFileUpload({
         url: '/websiteService/fileUpload/' + fileElementId + '/' + fileUploadType,
         secureuri: false,
