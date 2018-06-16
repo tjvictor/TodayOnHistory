@@ -134,7 +134,6 @@ function getEventByIdCallback(data){
         var content = item.content;
         var split = '<div class="splitLine"></div>';
         var others = '<p style="text-align:left;font-size: 0.2rem;padding:0;">分类: '+item.category+'</p>';;
-        others += '<p style="text-align:left;font-size: 0.2rem;padding:0;">分类: '+item.category+'</p>';;
         others += '<p style="text-align:left;font-size: 0.2rem;padding:0;">地点: '+item.location+'</p>';;
         others += '<p style="text-align:left;font-size: 0.2rem;padding:0;">相关股票: '+item.stockCode+'</p>';;
         others += '<p style="text-align:left;font-size: 0.2rem;padding:0;">标签: '+item.tag+'</p>';;
