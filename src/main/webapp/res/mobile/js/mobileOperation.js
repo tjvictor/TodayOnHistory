@@ -1,3 +1,9 @@
+function footTabChange(obj, url){
+    $(obj).siblings().removeClass('bottomTab');
+    $(obj).addClass('bottomTab');
+    $('#mainContent').load('mobileView/'+url);
+}
+
 function login() {
     var sid = $('#sid').val();
     var password = $('#password').val();
@@ -139,4 +145,86 @@ function getEventByIdCallback(data){
         others += '<p style="text-align:left;font-size: 0.2rem;padding:0;">标签: '+item.tag+'</p>';;
         $('#mainDiv').html(style+wrapperPrefix+title+author+content+split+others+wrapperSuffix);
     }
+}
+
+function bsSelect(obj, param) {
+    $('.sc_bs div').removeClass('sc_bsSelected');
+    $(obj).addClass('sc_bsSelected');
+    if (param == 'sell') {
+        $('#initPrice').css('display', 'block');
+    } else {
+        $('#initPrice').css('display', 'none');
+    }
+}
+
+function calculate() {
+    var market = $('.sc_tabSelected').text();
+    var deal = $('.sc_bsSelected').text();
+    var price = parseFloat($('#priceTxt').val());
+    var quantity = parseFloat($('#quantityTxt').val());
+    var amount = parseFloat((price * quantity).toFixed(2));
+    var sxfl = parseFloat($('#sxflTxt').val());
+    var ghsl = parseFloat($('#ghslTxt').val());
+    var yssl = parseFloat($('#ysslTxt').val());
+    var commission = parseFloat((amount * sxfl).toFixed(2));
+
+    if (commission < 5) {
+        commission = 5;
+    }
+    var ghTax = 0;
+    var stockTax = 0;
+    var finalAmount = 0;
+    if (market == '沪市') {
+        ghTax = parseFloat((amount * ghsl).toFixed(2));
+    }
+    if (deal == '卖') {
+        stockTax = parseFloat((amount * yssl).toFixed(2));
+        finalAmount = amount - ghTax - stockTax - commission;
+    } else {
+        finalAmount = amount + ghTax + stockTax + commission;
+    }
+    finalAmount = parseFloat(finalAmount.toFixed(2));
+    var template = '';
+    template += '<div style="width:100%"><div class="left" style="width:30%">股票金额:</div><div class="left" style="width:70%">' + amount + '</div><div class="clear"></div></div>';
+    template += '<div style="width:100%"><div class="left" style="width:30%">手续费:</div><div class="left" style="width:70%">' + commission + '</div><div class="clear"></div></div>';
+    template += '<div style="width:100%"><div class="left" style="width:30%">印花税:</div><div class="left" style="width:70%">' + stockTax + '</div><div class="clear"></div></div>';
+    template += '<div style="width:100%"><div class="left" style="width:30%">过户费:</div><div class="left" style="width:70%">' + ghTax + '</div><div class="clear"></div></div>';
+    template += '<div style="width:100%"><div class="left" style="width:30%">成交金额:</div><div class="left" style="width:70%">' + finalAmount + '</div><div class="clear"></div></div>';
+    if (deal == '买') {
+        var sellPrice = 0;
+        if (market == '沪市') {
+            sellPrice = parseFloat((finalAmount / (quantity * (1 - sxfl - yssl - ghsl))).toFixed(2));
+            if (sellPrice * quantity * sxfl < 5) {
+                sellPrice = parseFloat(((finalAmount + 5) / (quantity * (1 - yssl - ghsl))).toFixed(2));
+            }
+        } else {
+            sellPrice = parseFloat((finalAmount / (quantity * (1 - sxfl - yssl))).toFixed(2));
+            if (sellPrice * quantity * sxfl < 5) {
+                sellPrice = parseFloat(((finalAmount + 5) / (quantity * (1 - yssl))).toFixed(2));
+            }
+        }
+        template += '<div style="width:100%"><div class="left" style="width:30%">保本价格:</div><div class="left" style="width:70%">' + sellPrice + '</div><div class="clear"></div></div>';
+    } else {
+        var profit = 0;
+        var initPrice = 0;
+        if ($('#initPriceTxt').val()) {
+            initPrice = parseFloat($('#initPriceTxt').val());
+        }
+        var sxf = initPrice * quantity * sxfl;
+        if (sxf < 5) {
+            sxf = 5;
+        }
+        if (market == '沪市') {
+            profit = (finalAmount - sxf - (initPrice * quantity * (1 + ghsl))).toFixed(2);
+        } else {
+            profit = (finalAmount - sxf - initPrice * quantity).toFixed(2);
+        }
+        if (profit < 0) {
+            template += '<div style="width:100%"><div class="left" style="width:30%">盈亏金额:</div><div class="left" style="width:70%;color:green;">' + profit + '</div><div class="clear"></div></div>';
+        } else {
+            template += '<div style="width:100%"><div class="left" style="width:30%">盈亏金额:</div><div class="left" style="width:70%;color:red;">' + profit + '</div><div class="clear"></div></div>';
+        }
+    }
+
+    $('.sc_result').html(template);
 }

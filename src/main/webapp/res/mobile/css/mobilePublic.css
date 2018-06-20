@@ -103,7 +103,7 @@ body{
 }
 
 .mainCalendar{
-    margin-top: 0.1rem;
+
 }
 
 .mainEventView{
@@ -113,4 +113,81 @@ body{
     height: 100%;
     background-color:white;
     border-radius: 0.2rem;
+}
+
+.mainFoot{
+    border-top:1px solid black;
+    position:fixed;
+    bottom: 0rem;
+    left:0rem;
+    right:0rem;
+    height:0.5rem;
+    width:100%;
+    background:rgb(255, 255, 255);
+    text-align:center;
+}
+.mainFoot a{
+    float:left;
+    width:25%;
+    border-bottom:0rem;
+    line-height:0.5rem;
+    border-right: 1px dashed black;
+}
+.mainFoot a:last-child{
+    border-right: 0;
+}
+.mainFoot .bottomTab{
+    color: white;
+    background-color: black;
+}
+
+.sc_tab {
+	width: 100%;
+	height: auto;
+	text-align: center;
+	padding: 0;
+	border: 1px solid black;
+}
+
+.sc_tabSelected {
+	background-color: black;
+	color: white;
+	border: 1px solid black;
+}
+
+.sc_rate {
+	width: 100%;
+	height: auto;
+	line-height: 0.4rem;
+	text-align: left;
+	padding: 0.2rem;
+}
+
+.sc_deal {
+	width: 100%;
+	height: auto;
+	line-height: 0.4rem;
+	text-align: left;
+	padding: 0 0.22rem;
+}
+
+.sc_bs {
+	height: auto;
+	text-align: center;
+	padding: 0;
+	border: 1px solid black;
+}
+
+.sc_bsSelected {
+	background-color: black;
+	color: white;
+	border: 1px solid black;
+}
+
+.sc_result {
+	width: 100%;
+	height: auto;
+	line-height: 0.4rem;
+	text-align: left;
+	padding: 0.2rem;
 }

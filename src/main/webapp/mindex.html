@@ -26,8 +26,6 @@
             }
             $('#dateSpan').text("历史上的今天: "+showToday());
             getAlertWord();
-            getEventsTotalCountByDate();
-            getEventsByDate(1, 10);
         });
     </script>
 </head>
@@ -38,21 +36,26 @@
         </div>
         <div class="right">
             <a href="mobileView/login.html" onclick="logout()" style="color:blue;">[退出]</a>
-            <a href="mobileView/stockCalc.html" style="color:blue;">成本计算</a>
+            <a href="mobileView/stockCalc.html" style="color:blue;"></a>
         </div>
         <div class="clear"></div>
     </div>
     <div class="mainAlert">
         <span>警钟长鸣: 没有准确消息，绝对不能追高!!!。</span>
     </div>
-    <div class="mainCalendar">
-        <div id="eventCalendar" class="easyui-calendar" style="width:100%;height:250px;" data-options="onSelect: function(date) { getEventsTotalCountByDate(); getEventsByDate(1, 10);  }"></div>
-    </div>
 
-    <div class="mainEventView">
+    <div id="mainContent" style="padding:0.05rem; margin-top: 0.1rem;">
 
     </div>
 
-    <div id="mainEvent_pagination"></div>
+    <!--index foot-->
+    <div style="clear:both;padding:0"></div>
+    <div style="padding-bottom:0.5rem;"></div>
+    <div class="mainFoot">
+        <a onclick="footTabChange(this, 'eventCalender.html')">历史事件</a>
+        <a onclick="footTabChange(this, 'experience.html')">心得体会</a>
+        <a onclick="footTabChange(this, 'stockCalc.html')">成本计算</a>
+        <a onclick="footTabChange(this, 'wiki.html')">名词解释</a>
+    </div>
 </body>
 </html>

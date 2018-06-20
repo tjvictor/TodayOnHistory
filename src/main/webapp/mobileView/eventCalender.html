@@ -1,0 +1,16 @@
+<script>
+    $(function(){
+        $.parser.parse('.mainCalendar');
+        getEventsTotalCountByDate();
+        getEventsByDate(1, 10);
+    });
+</script>
+<div class="mainCalendar">
+    <div id="eventCalendar" class="easyui-calendar" style="width:100%;height:250px;" data-options="onSelect: function(date) { getEventsTotalCountByDate(); getEventsByDate(1, 10);  }"></div>
+</div>
+
+<div class="mainEventView">
+
+</div>
+
+<div id="mainEvent_pagination"></div>
