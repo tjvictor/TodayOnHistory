@@ -6,9 +6,13 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class CommonUtils {
-    public static String getCurrentDate(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    public static String getCurrentDate(String format){
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(new Date());
+    }
+
+    public static String getCurrentDate(){
+        return getCurrentDate("yyyy-MM-dd");
     }
 
     public static String getCurrentMonth(){
