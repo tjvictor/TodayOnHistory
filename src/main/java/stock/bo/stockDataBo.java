@@ -1,12 +1,15 @@
 package stock.bo;
 
-import org.springframework.stereotype.Component;
-import stock.model.StockEntity;
+import stock.model.StockDateDataEntity;
 
-import java.io.*;
+import org.springframework.stereotype.Component;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 
 @Component
 public class stockDataBo {
@@ -54,9 +57,9 @@ public class stockDataBo {
         return bos.toByteArray();
     }
 
-    public List<StockEntity> getStocksByVolatility(String stockCode, String volatility, String startDate, String endDate){
-        return null;
+    public StockDateDataEntity getStocksByVolatility(String stockCode, String volatility, String startDate, String endDate){
 
+        return null;
     }
 
 }
