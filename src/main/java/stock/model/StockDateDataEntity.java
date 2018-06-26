@@ -1,5 +1,6 @@
 package stock.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StockDateDataEntity {
@@ -7,6 +8,10 @@ public class StockDateDataEntity {
     private String stockName;
 
     private List<StockDateDataUnit> stockDateDataUnitList;
+
+    public StockDateDataEntity(){
+        this.stockDateDataUnitList = new ArrayList<StockDateDataUnit>();
+    }
 
     public String getStockCode() {
         return stockCode;

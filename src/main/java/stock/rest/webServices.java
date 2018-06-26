@@ -1,17 +1,28 @@
 package stock.rest;
 
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import stock.dao.eventDao;
 import stock.dao.staffDao;
-import stock.model.*;
+import stock.dao.stockDao;
+import stock.model.AlertWord;
+import stock.model.Event;
+import stock.model.FileUploadEntity;
+import stock.model.ResponseObject;
+import stock.model.Staff;
+import stock.model.StockDateDataEntity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.FormParam;
@@ -61,6 +72,9 @@ public class webServices {
 
     @Autowired
     private eventDao eventDaoImp;
+
+    @Autowired
+    private stockDao stockDaoImp;
 
     //region file upload
     @PostMapping("/fileUpload/{requestFileName}/{requestFileType}")
@@ -297,4 +311,21 @@ public class webServices {
             return new ResponseObject("error", "系统错误，请联系系统管理员");
         }
     }
+
+    @RequestMapping(value = "/getStocksByVolatilityByMonth", method = RequestMethod.GET)
+    public ResponseObject getStocksByVolatilityByMonth(@RequestParam("stockCode") String stockCode,
+                                                        @RequestParam("volatility") String volatility,
+                                                        @RequestParam("month") String month,
+                                                        @RequestParam(value = "startDate", defaultValue = "", required = false) String startDate,
+                                                        @RequestParam(value = "endDate", defaultValue = "", required = false) String endDate) {
+
+        try {
+            StockDateDataEntity item = stockDaoImp.getStocksByVolatilityByMonth(stockCode, volatility, startDate, endDate, month);
+            return new ResponseObject("ok", "查询成功", item);
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            return new ResponseObject("error", "系统错误，请联系系统管理员");
+        }
+    }
+
 }
