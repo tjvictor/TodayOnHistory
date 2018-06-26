@@ -52,7 +52,7 @@ function callAjax(url, iTarget, iCallBack, iCallBackParam, iPost, iParams, iLoad
 
 function showToday() {
     var enabled = 0;
-    today = new Date();
+    var today = new Date();
     var day;
     var date;
     if (today.getDay() == 0) day = " 星期日";
@@ -66,4 +66,8 @@ function showToday() {
     date = (today.getFullYear()) + "年" + (today.getMonth() + 1) + "月" + today.getDate() + "日" + day + "";
 
     return date;
+}
+
+function toString(item){
+    return "'"+unit.date+"'";
 }

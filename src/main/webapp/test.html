@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <link rel="stylesheet" type="text/css" href="res/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="res/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="res/kindeditor/themes/default/default.css">
+    <link rel="stylesheet" type="text/css" href="res/css/webPublic.css">
+    <script type="text/javascript" src="res/js/jquery-3.0.0.min.js"></script>
+    <script type="text/javascript" src="res/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="res/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script charset="utf-8" type="text/javascript" src="res/kindeditor/kindeditor-all-min.js"></script>
+    <script charset="utf-8" type="text/javascript" src="res/kindeditor/lang/zh-CN.js"></script>
+    <script type="text/javascript" src="res/js/js.cookie.js"></script>
+    <script type="text/javascript" src="res/js/ajaxfileupload.js"></script>
+    <script type="text/javascript" src="res/js/webOperation.js?v=1.0"></script>
+    <script type="text/javascript" src="res/js/webCommon.js?v=1.0"></script>
+    <script language="JavaScript" type="text/javascript">
+        $(function (){
+            var today = new Date();
+            var month = today.getMonth()+1;
+            var day = today.getDate();
+            var dateString = today.getFullYear() + "-" + (month<10?"0"+month:month) + "-" + (day<10?"0"+day:day);
+            $('#monthTxt').val(month<10?'0'+month:month);
+            $('#startDateTxt').val('2000-01-01');
+            $('#endDateTxt').val(dateString);
+        });
+
+        function volatilityAnalyse(){
+            var param = 'stockCode='+$('#stockCodeTxt').val()+'&volatility='+$('#volatilityTxt').val()+'&month='+$('#monthTxt').val()+'&startDate='+$('#startDateTxt').val()+'&endDate='+$('#endDateTxt').val();
+            callAjax('/websiteService/getStocksByVolatilityByMonth', '', 'getStocksByVolatilityByMonthCallback', '', '', param, '');
+        }
+
+        function getStocksByVolatilityByMonthCallback(data){
+            var item = data.callBackData;
+            var units = item.stockDateDataUnitList;
+            var sortedUnits = units.sort(function(a,b){
+                var day1 = a.date.split('-')[2];
+                var day2 = b.date.split('-')[2];
+                if(day1 > day2){
+                    return 1;
+                } else if (day1 < day2){
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
+
+            var positive = 0;
+            var negative = 0;
+            var color = 'red';
+            var unitTemplate = '';
+            for(var i = 0 ; i < sortedUnits.length; i++){
+                var unit = sortedUnits[i];
+                if(unit.pchg > 0){
+                    color = 'red';
+                    positive++;
+                } else{
+                    color = 'green';
+                    negative++;
+                }
+                unitTemplate += '<div style="color:'+color+';width:100%;">';
+                unitTemplate += '<div class="left" style="width:12%;">'+unit.date+'</div>';
+                unitTemplate += '<div class="left" style="width:22%;">'+unit.topen.toFixed(2)+'</div>';
+                unitTemplate += '<div class="left" style="width:22%;">'+unit.tclose.toFixed(2)+'</div>';
+                unitTemplate += '<div class="left" style="width:10%;">'+unit.pchg.toFixed(2)+'</div>';
+                unitTemplate += '<div class="left" style="width:22%;">'+unit.chg.toFixed(2)+'</div>';
+                unitTemplate += '<div class="clear"></div></div>';
+            }
+            var template = '<div>分析结果为:</div>';
+            template += '<div>'+item.stockCode+'在历史的'+$('#monthTxt').val()+'月份里:</div>';
+            template += '<div>共有<font color="red">'+positive+'</font>次涨幅大于 '+$('#volatilityTxt').val()+'%</div>';
+            template += '<div>共有<font color="green">'+negative+'</font>次跌幅大于-'+$('#volatilityTxt').val()+'%</div>';
+            template += unitTemplate;
+            $('#result').html(template);
+
+        }
+    </script>
+</head>
+<body>
+<table style="width:100%">
+    <tr>
+        <td style="width:10%">代码:</td>
+        <td style="width:40%"><input type="text" id="stockCodeTxt" style="width:80%"></td>
+        <td style="width:10%">幅度(%):</td>
+        <td style="width:40%"><input type="text" id="volatilityTxt" style="width:80%" value="3"></td>
+    </tr>
+</table>
+
+<table style="width:100%">
+    <tr>
+        <td style="width:24%">查询时间范围: 从</td>
+        <td style="width:36%"><input type="text" id="startDateTxt" style="width:80%"></td>
+        <td style="width:4%">到</td>
+        <td style="width:36%"><input type="text" id="endDateTxt" style="width:80%"></td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <td style="width:10%">查询月份:</td>
+        <td style="width:40%"><input type="text" id="monthTxt" style="width:80%"></td>
+        <td style="width:10%">幅度:</td>
+        <td style="width:40%"><input type="button" value="开始分析" onclick="volatilityAnalyse()"></td>
+    </tr>
+</table>
+
+<div id="result">
+
+</div>
+</body>
+</html>
