@@ -4,11 +4,13 @@ import stock.dao.stockDao;
 import stock.model.Stock.StockVolatility;
 import stock.model.StockDateDataEntity;
 import stock.model.StockDateDataUnit;
+import stock.model.StockEntity;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -79,6 +81,76 @@ public class stockDaoImp extends BaseDao implements stockDao {
         }
 
         return items;
-
     }
+
+    @Override
+    public void insertStockHistoryData(List<StockEntity> items) throws SQLException {
+
+//        try (Connection connection = DriverManager.getConnection(dbConnectString)){
+//            connection.setAutoCommit(false);
+//            String createSql = "INSERT INTO ? VALUES (?,?,?,?,?,?,?,?,?,?);";
+//            try(Statement ps = connection.createStatement()) {
+//                ps.addBatch();
+//
+//                ps.executeBatch();
+//            }
+//
+//            connection.commit();
+//        }
+    }
+
+    @Override
+    public void insertStockHistoryData(String tableName, List<StockEntity> items) throws SQLException {
+        String createSql = String.format("INSERT INTO %s VALUES (?,?,?,?,?,?,?,?,?,?);", tableName);
+        try (Connection connection = DriverManager.getConnection(dbConnectString)){
+            connection.setAutoCommit(false);
+            try(PreparedStatement ps = connection.prepareStatement(createSql)) {
+                for(StockEntity item : items) {
+                    int i = 1;
+                    ps.setString(i++, item.getDate());
+                    ps.setString(i++, item.getTclose());
+                    ps.setString(i++, item.getHigh());
+                    ps.setString(i++, item.getLow());
+                    ps.setString(i++, item.getTopen());
+                    ps.setString(i++, item.getLclose());
+                    ps.setString(i++, item.getChg());
+                    ps.setString(i++, item.getPchg());
+                    ps.setString(i++, item.getVoturnover());
+                    ps.setString(i++, item.getVaturnover());
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+            }
+
+            connection.commit();
+        }
+    }
+
+    @Override
+    public void createNewStockTable(String tableName) throws SQLException {
+        try (Connection connection = DriverManager.getConnection(dbConnectString)){
+            String createSql = String.format("CREATE TABLE %s (date,tclose,high,low,topen,lclose,chg,pchg,voturnover,vaturnover);", tableName);
+            try(PreparedStatement ps = connection.prepareStatement(createSql)) {
+                ps.executeUpdate();
+            }
+        }
+    }
+
+    @Override
+    public boolean isTableExist(String tableName) throws SQLException {
+        String selectSql = String.format("SELECT * FROM sqlite_master where type = 'table' and tbl_name = '%s'", tableName);
+
+        try (Connection connection = DriverManager.getConnection(dbConnectString)) {
+            try (Statement stmt = connection.createStatement()) {
+                try (ResultSet rs = stmt.executeQuery(selectSql)) {
+                    if (rs.next()) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
 }
