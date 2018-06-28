@@ -29,7 +29,7 @@ public class stockDaoImp extends BaseDao implements stockDao {
             whereSql += String.format(" and date >= '%s' and date <= '%s'", startDate, endDate);
         }
 
-        String selectSql = String.format("select date, tclose, high, low, topen, lclose, chg, pchg, voturnover, vaturnover from s%s %s", stockCode, whereSql);
+        String selectSql = String.format("select date, tclose, high, low, topen, lclose, chg, pchg, voturnover, vaturnover from s%s %s order by date desc", stockCode, whereSql);
 
         try (Connection connection = DriverManager.getConnection(dbConnectString)) {
             try (Statement stmt = connection.createStatement()) {

@@ -228,3 +228,70 @@ function calculate() {
 
     $('.sc_result').html(template);
 }
+
+function volatilityAnalyse() {
+    var param = 'stockCode=' + $('#stockCodeTxt').val() + '&volatility=' + $('#volatilityTxt').val() + '&month=' + $('#monthTxt').val() + '&startDate=' + $('#startDateTxt').val() + '&endDate=' + $('#endDateTxt').val();
+    callAjax('/websiteService/getStocksByVolatilityByMonth', '', 'getStocksByVolatilityByMonthCallback', '', '', param, '');
+}
+
+function getStocksByVolatilityByMonthCallback(data) {
+    var item = data.callBackData;
+    var units = item.stockDateDataUnitList;
+    var sortedUnits = units.sort(function(a, b) {
+        var day1 = a.date.split('-')[2];
+        var day2 = b.date.split('-')[2];
+        if (day1 > day2) {
+            return 1;
+        } else if (day1 < day2) {
+            return - 1;
+        } else {
+            return 0;
+        }
+    });
+
+    var positive = 0;
+    var negative = 0;
+    var volatility = 0;
+    var color = 'color:red;';
+    var backgroundColor = 'background-color: white;';
+    var hasBackgroundColor = true;
+    var unitTemplate = '';
+    for (var i = 0; i < sortedUnits.length; i++) {
+        var unit = sortedUnits[i];
+        if (unit.pchg > 0) {
+            color = 'color:red;';
+            positive++;
+        } else {
+            color = 'color:green;';
+            negative++;
+        }
+        volatility += unit.pchg;
+        if (i > 0) {
+            var preUnit = sortedUnits[i - 1];
+            if (preUnit.date.split('-')[2] != unit.date.split('-')[2]) {
+                if (hasBackgroundColor) {
+                    backgroundColor = ';';
+                    hasBackgroundColor = false;
+                } else {
+                    backgroundColor = 'background-color: white;';
+                    hasBackgroundColor = true;
+                }
+            }
+        }
+        unitTemplate += '<div style="width:100%;text-align:right;' + backgroundColor + '">';
+        unitTemplate += '<div class="left" style="width:25%;text-align:left;">' + unit.date + '</div>';
+        unitTemplate += '<div class="left" style="width:20%;' + color + '">' + parseFloat(unit.topen).toFixed(2) + '</div>';
+        unitTemplate += '<div class="left" style="width:20%;' + color + '">' + parseFloat(unit.tclose).toFixed(2) + '</div>';
+        unitTemplate += '<div class="left" style="width:17%;' + color + '">' + parseFloat(unit.pchg).toFixed(2) + '%</div>';
+        unitTemplate += '<div class="left" style="width:18%;' + color + '">' + parseFloat(unit.chg).toFixed(2) + '</div>';
+        unitTemplate += '<div class="clear"></div></div>';
+    }
+    var template = '<div>分析结果为:</div>';
+    template += '<div>' + item.stockCode + '在历史的' + $('#monthTxt').val() + '月份里:</div>';
+    template += '<div>共有<span style="color:red;">' + positive + '</span>次涨幅大于 ' + $('#volatilityTxt').val() + '%</div>';
+    template += '<div>共有<span style="color:green;">' + negative + '</span>次跌幅大于-' + $('#volatilityTxt').val() + '%</div>';
+    template += '<div>总体涨幅为: <span style="color:' + (volatility > 0 ? 'red': 'green') + ';">' + parseFloat(volatility).toFixed(2) + '%</span></div>';
+    template += unitTemplate;
+    $('#result').html(template);
+
+}
