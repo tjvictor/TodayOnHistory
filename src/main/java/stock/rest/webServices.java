@@ -1,5 +1,6 @@
 package stock.rest;
 
+import stock.bo.stockDataBo;
 import stock.dao.eventDao;
 import stock.dao.staffDao;
 import stock.dao.stockDao;
@@ -9,7 +10,9 @@ import stock.model.FileUploadEntity;
 import stock.model.ResponseObject;
 import stock.model.Staff;
 import stock.model.StockDateDataEntity;
+import stock.utils.CommonUtils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +78,9 @@ public class webServices {
 
     @Autowired
     private stockDao stockDaoImp;
+
+    @Autowired
+    private stockDataBo stockBo;
 
     //region file upload
     @PostMapping("/fileUpload/{requestFileName}/{requestFileType}")
@@ -316,10 +322,14 @@ public class webServices {
     public ResponseObject getStocksByVolatilityByMonth(@RequestParam("stockCode") String stockCode,
                                                         @RequestParam("volatility") String volatility,
                                                         @RequestParam("month") String month,
-                                                        @RequestParam(value = "startDate", defaultValue = "", required = false) String startDate,
-                                                        @RequestParam(value = "endDate", defaultValue = "", required = false) String endDate) {
+                                                        @RequestParam(value = "startDate", defaultValue = "1900-01-01", required = false) String startDate,
+                                                        @RequestParam(value = "endDate", defaultValue = "", required = false) String endDate) throws IOException {
 
         try {
+            stockBo.initStockData(stockCode);
+            if(StringUtils.isEmpty(endDate)){
+                endDate = CommonUtils.getCurrentDate();
+            }
             StockDateDataEntity item = stockDaoImp.getStocksByVolatilityByMonth(stockCode, volatility, startDate, endDate, month);
             return new ResponseObject("ok", "查询成功", item);
         } catch (SQLException e) {

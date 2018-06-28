@@ -20,4 +20,6 @@ public interface stockDao {
     void createNewStockTable(String tableName) throws SQLException;
 
     boolean isTableExist(String tableName) throws SQLException;
+
+    void insertStockLastDate(String code, String name, String lastDate) throws SQLException;
 }

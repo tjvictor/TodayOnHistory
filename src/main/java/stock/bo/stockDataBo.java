@@ -3,6 +3,7 @@ package stock.bo;
 import stock.dao.stockDao;
 import stock.model.StockDateDataEntity;
 import stock.model.StockEntity;
+import stock.utils.CommonUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,7 @@ public class stockDataBo {
     @Autowired
     private stockDao stockDaoImp;
 
-    private static final String STOCK_DATA_URL = "http://quotes.money.163.com/service/chddata.html?code=0%s&start=20180101&end=%s&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER";
+    private static final String STOCK_DATA_URL = "http://quotes.money.163.com/service/chddata.html?code=0%s&start=19900101&end=%s&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER";
 
     public void downloadFileFromUrl(String stockCode) throws IOException, SQLException {
 
@@ -98,4 +99,47 @@ public class stockDataBo {
 
     }
 
+    public void initStockData(String stockCode) throws SQLException, IOException {
+        if(!isTableExist(stockCode)){
+            stockDaoImp.createNewStockTable("s"+stockCode);
+            insertStockHistoryDataFromWeb(stockCode, CommonUtils.getCurrentDate());
+            stockDaoImp.insertStockLastDate(stockCode, "", CommonUtils.getCurrentDate());
+        }
+    }
+
+    public void insertStockHistoryDataFromWeb(String code, String endDate) throws IOException, SQLException {
+        URL url = new URL(String.format(STOCK_DATA_URL, code, endDate));
+        System.setProperty("java.net.useSystemProxies", "true");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        InputStream inputStream = conn.getInputStream();
+        byte[] getData = readInputStream(inputStream);
+        String str = new String(getData, "GB2312");
+
+        List<StockEntity> stockEntityList = new ArrayList<StockEntity>();
+        String[] dataList = str.split("\r\n");
+        int index = 1;
+        if (dataList.length > 1) {
+            while (index < dataList.length) {
+                String item = dataList[index];
+                String[] data = item.split(",");
+                StockEntity stock = new StockEntity();
+                stock.setDate(data[0]);
+                stock.setCode(data[1]);
+                stock.setTclose(data[3]);
+                stock.setHigh(data[4]);
+                stock.setLow(data[5]);
+                stock.setTopen(data[6]);
+                stock.setLclose(data[7]);
+                stock.setChg(data[8]);
+                stock.setPchg(data[9]);
+                stock.setVoturnover(data[10]);
+                stock.setVaturnover(data[11]);
+
+                stockEntityList.add(stock);
+                index++;
+            }
+        }
+
+        stockDaoImp.insertStockHistoryData("s"+code, stockEntityList);
+    }
 }

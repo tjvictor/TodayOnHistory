@@ -153,4 +153,18 @@ public class stockDaoImp extends BaseDao implements stockDao {
         return false;
     }
 
+    @Override
+    public void insertStockLastDate(String code, String name, String lastDate) throws SQLException {
+        try (Connection connection = DriverManager.getConnection(dbConnectString)){
+            String insertSql = "insert into StockLastDate values(?,?,?);";
+            try(PreparedStatement ps = connection.prepareStatement(insertSql)) {
+                int i = 1;
+                ps.setString(i++, code);
+                ps.setString(i++, name);
+                ps.setString(i++, lastDate);
+                ps.executeUpdate();
+            }
+        }
+    }
+
 }
