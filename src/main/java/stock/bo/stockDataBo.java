@@ -24,7 +24,7 @@ public class stockDataBo {
     @Autowired
     private stockDao stockDaoImp;
 
-    private static final String STOCK_DATA_URL = "http://quotes.money.163.com/service/chddata.html?code=0%s&start=19900101&end=%s&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER";
+    private static final String STOCK_DATA_URL = "http://quotes.money.163.com/service/chddata.html?code=0%s&start=%s&end=%s&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER";
 
     public void downloadFileFromUrl(String stockCode) throws IOException, SQLException {
 
@@ -102,13 +102,13 @@ public class stockDataBo {
     public void initStockData(String stockCode) throws SQLException, IOException {
         if(!isTableExist(stockCode)){
             stockDaoImp.createNewStockTable("s"+stockCode);
-            insertStockHistoryDataFromWeb(stockCode, CommonUtils.getCurrentDate());
+            insertStockHistoryDataFromWeb(stockCode, "1990-01-01", CommonUtils.getCurrentDate());
             stockDaoImp.insertStockLastDate(stockCode, "", CommonUtils.getCurrentDate());
         }
     }
 
-    public void insertStockHistoryDataFromWeb(String code, String endDate) throws IOException, SQLException {
-        URL url = new URL(String.format(STOCK_DATA_URL, code, endDate));
+    public void insertStockHistoryDataFromWeb(String code, String startDate, String endDate) throws IOException, SQLException {
+        URL url = new URL(String.format(STOCK_DATA_URL, code, startDate, endDate));
         System.setProperty("java.net.useSystemProxies", "true");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         InputStream inputStream = conn.getInputStream();

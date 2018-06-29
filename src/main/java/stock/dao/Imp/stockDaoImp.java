@@ -1,6 +1,7 @@
 package stock.dao.Imp;
 
 import stock.dao.stockDao;
+import stock.model.Stock.StockRegister;
 import stock.model.Stock.StockVolatility;
 import stock.model.StockDateDataEntity;
 import stock.model.StockDateDataUnit;
@@ -23,8 +24,8 @@ public class stockDaoImp extends BaseDao implements stockDao {
     public StockDateDataEntity getStocksByVolatility(String stockCode, String volatility, String startDate, String endDate) throws SQLException {
         StockDateDataEntity item = new StockDateDataEntity();
         item.setStockCode(stockCode);
-        int volatility_num = Math.abs(Integer.parseInt(volatility));
-        String whereSql = String.format(" where ABS(pchg) > %s", volatility);
+        float volatility_num = Math.abs(Float.parseFloat(volatility));
+        String whereSql = String.format(" where ABS(pchg) >= %s", volatility);
         if(StringUtils.isNotEmpty(startDate) && StringUtils.isNotEmpty(endDate)){
             whereSql += String.format(" and date >= '%s' and date <= '%s'", startDate, endDate);
         }
@@ -86,17 +87,6 @@ public class stockDaoImp extends BaseDao implements stockDao {
     @Override
     public void insertStockHistoryData(List<StockEntity> items) throws SQLException {
 
-//        try (Connection connection = DriverManager.getConnection(dbConnectString)){
-//            connection.setAutoCommit(false);
-//            String createSql = "INSERT INTO ? VALUES (?,?,?,?,?,?,?,?,?,?);";
-//            try(Statement ps = connection.createStatement()) {
-//                ps.addBatch();
-//
-//                ps.executeBatch();
-//            }
-//
-//            connection.commit();
-//        }
     }
 
     @Override
@@ -154,14 +144,49 @@ public class stockDaoImp extends BaseDao implements stockDao {
     }
 
     @Override
+    public List<StockRegister> getAllStockRegisters() throws SQLException {
+        List<StockRegister> items = new ArrayList<StockRegister>();
+        String selectSql = String.format("SELECT * FROM StockRegister");
+
+        try (Connection connection = DriverManager.getConnection(dbConnectString)) {
+            try (Statement stmt = connection.createStatement()) {
+                try (ResultSet rs = stmt.executeQuery(selectSql)) {
+                    while (rs.next()) {
+                        int i = 1;
+                        StockRegister item = new StockRegister();
+                        item.setCode(rs.getString(i++));
+                        item.setName(rs.getString(i++));
+                        item.setLastDate(rs.getString(i++));
+                        items.add(item);
+                    }
+                }
+            }
+        }
+        return items;
+    }
+
+    @Override
     public void insertStockLastDate(String code, String name, String lastDate) throws SQLException {
         try (Connection connection = DriverManager.getConnection(dbConnectString)){
-            String insertSql = "insert into StockLastDate values(?,?,?);";
+            String insertSql = "insert into StockRegister values(?,?,?);";
             try(PreparedStatement ps = connection.prepareStatement(insertSql)) {
                 int i = 1;
                 ps.setString(i++, code);
                 ps.setString(i++, name);
                 ps.setString(i++, lastDate);
+                ps.executeUpdate();
+            }
+        }
+    }
+
+    @Override
+    public void updateStockLastDate(String code, String lastDate) throws SQLException {
+        try (Connection connection = DriverManager.getConnection(dbConnectString)){
+            String insertSql = "update StockRegister set LastDate = ? where Code = ?";
+            try(PreparedStatement ps = connection.prepareStatement(insertSql)) {
+                int i = 1;
+                ps.setString(i++, lastDate);
+                ps.setString(i++, code);
                 ps.executeUpdate();
             }
         }

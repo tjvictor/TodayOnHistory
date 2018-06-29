@@ -43,7 +43,7 @@ public class StockEntity {
     }
 
     public void setTclose(String tclose) {
-        this.tclose = tclose;
+        this.tclose = checkValue(tclose);
     }
 
     public String getHigh() {
@@ -51,7 +51,7 @@ public class StockEntity {
     }
 
     public void setHigh(String high) {
-        this.high = high;
+        this.high = checkValue(high);
     }
 
     public String getLow() {
@@ -59,7 +59,7 @@ public class StockEntity {
     }
 
     public void setLow(String low) {
-        this.low = low;
+        this.low = checkValue(low);
     }
 
     public String getTopen() {
@@ -67,7 +67,7 @@ public class StockEntity {
     }
 
     public void setTopen(String topen) {
-        this.topen = topen;
+        this.topen = checkValue(topen);
     }
 
     public String getLclose() {
@@ -75,7 +75,7 @@ public class StockEntity {
     }
 
     public void setLclose(String lclose) {
-        this.lclose = lclose;
+        this.lclose = checkValue(lclose);
     }
 
     public String getChg() {
@@ -83,7 +83,7 @@ public class StockEntity {
     }
 
     public void setChg(String chg) {
-        this.chg = chg;
+        this.chg = checkValue(chg);
     }
 
     public String getPchg() {
@@ -91,7 +91,7 @@ public class StockEntity {
     }
 
     public void setPchg(String pchg) {
-        this.pchg = pchg;
+        this.pchg = checkValue(pchg);
     }
 
     public String getVoturnover() {
@@ -99,7 +99,7 @@ public class StockEntity {
     }
 
     public void setVoturnover(String voturnover) {
-        this.voturnover = voturnover;
+        this.voturnover = checkValue(voturnover);
     }
 
     public String getVaturnover() {
@@ -107,6 +107,15 @@ public class StockEntity {
     }
 
     public void setVaturnover(String vaturnover) {
-        this.vaturnover = vaturnover;
+        this.vaturnover = checkValue(vaturnover);
+    }
+
+    private String checkValue(String item){
+        try{
+            Float.parseFloat(item);
+            return item;
+        }catch (NumberFormatException e){
+            return "0";
+        }
     }
 }

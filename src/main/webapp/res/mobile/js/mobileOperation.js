@@ -265,7 +265,7 @@ function getStocksByVolatilityByMonthCallback(data) {
             color = 'color:green;';
             negative++;
         }
-        volatility += unit.pchg;
+        volatility += parseFloat(unit.pchg);
         if (i > 0) {
             var preUnit = sortedUnits[i - 1];
             if (preUnit.date.split('-')[2] != unit.date.split('-')[2]) {
@@ -293,5 +293,40 @@ function getStocksByVolatilityByMonthCallback(data) {
     template += '<div>总体涨幅为: <span style="color:' + (volatility > 0 ? 'red': 'green') + ';">' + parseFloat(volatility).toFixed(2) + '%</span></div>';
     template += unitTemplate;
     $('#result').html(template);
+}
 
+function topPriceAnalyse(){
+    var param = 'stockCode=' + $('#stockCodeTxt').val();
+    callAjax('/websiteService/topPriceAnalyse', '', 'topPriceAnalyseCallback', '', '', param, '');
+}
+function topPriceAnalyseCallback(data){
+    var item = data.callBackData;
+    var sortedUnits = item.stockDateDataUnitList;
+    var positive = 0;
+    var negative = 0;
+    var color = 'color:red;';
+    var unitTemplate = '';
+    for (var i = 0; i < sortedUnits.length; i++) {
+        var unit = sortedUnits[i];
+        if (unit.pchg > 0) {
+            color = 'color:red;';
+            positive++;
+        } else {
+            color = 'color:green;';
+            negative++;
+        }
+        unitTemplate += '<div style="width:100%;text-align:right;' + (i%2==0?'background-color: white;':'') + '">';
+        unitTemplate += '<div class="left" style="width:25%;text-align:left;">' + unit.date + '</div>';
+        unitTemplate += '<div class="left" style="width:20%;' + color + '">' + parseFloat(unit.topen).toFixed(2) + '</div>';
+        unitTemplate += '<div class="left" style="width:20%;' + color + '">' + parseFloat(unit.tclose).toFixed(2) + '</div>';
+        unitTemplate += '<div class="left" style="width:17%;' + color + '">' + parseFloat(unit.pchg).toFixed(2) + '%</div>';
+        unitTemplate += '<div class="left" style="width:18%;' + color + '">' + parseFloat(unit.chg).toFixed(2) + '</div>';
+        unitTemplate += '<div class="clear"></div></div>';
+    }
+    var template = '<div>分析结果为:</div>';
+    template += '<div>' + item.stockCode + '在历史上</div>';
+    template += '<div>共有<span style="color:red;">' + positive + '</span>次涨停</div>';
+    template += '<div>共有<span style="color:green;">' + negative + '</span>次跌停</div>';
+    template += unitTemplate;
+    $('#result').html(template);
 }

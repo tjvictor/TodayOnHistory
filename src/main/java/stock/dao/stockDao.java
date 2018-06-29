@@ -1,5 +1,6 @@
 package stock.dao;
 
+import stock.model.Stock.StockRegister;
 import stock.model.Stock.StockVolatility;
 import stock.model.StockDateDataEntity;
 import stock.model.StockEntity;
@@ -21,5 +22,9 @@ public interface stockDao {
 
     boolean isTableExist(String tableName) throws SQLException;
 
+    List<StockRegister> getAllStockRegisters() throws SQLException;
+
     void insertStockLastDate(String code, String name, String lastDate) throws SQLException;
+
+    void updateStockLastDate(String code, String lastDate) throws SQLException;
 }

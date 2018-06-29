@@ -338,4 +338,17 @@ public class webServices {
         }
     }
 
+    @RequestMapping(value = "/topPriceAnalyse", method = RequestMethod.GET)
+    public ResponseObject topPriceAnalyse(@RequestParam("stockCode") String stockCode) throws IOException {
+
+        try {
+            stockBo.initStockData(stockCode);
+            StockDateDataEntity item = stockDaoImp.getStocksByVolatility(stockCode, "9.9", "", "");
+            return new ResponseObject("ok", "查询成功", item);
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            return new ResponseObject("error", "系统错误，请联系系统管理员");
+        }
+    }
+
 }
