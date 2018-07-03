@@ -44,6 +44,11 @@ public class CommonUtils {
         return sdf.format(new Date());
     }
 
+    public static String getCurrentHour() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH");
+        return sdf.format(new Date());
+    }
+
     public static String dateAddDay(String dateStr, int days) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();

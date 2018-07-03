@@ -16,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -102,8 +103,8 @@ public class stockDataBo {
     public void initStockData(String stockCode) throws SQLException, IOException {
         if(!isTableExist(stockCode)){
             stockDaoImp.createNewStockTable("s"+stockCode);
-            insertStockHistoryDataFromWeb(stockCode, "1990-01-01", CommonUtils.getCurrentDate());
-            stockDaoImp.insertStockLastDate(stockCode, "", CommonUtils.getCurrentDate());
+            insertStockHistoryDataFromWeb(stockCode, "19900101", CommonUtils.dateAddDay(CommonUtils.getCurrentDate(), -1).replace("-",""));
+            stockDaoImp.insertStockLastDate(stockCode, "", CommonUtils.getCurrentDate("yyyyMMdd"));
         }
     }
 
