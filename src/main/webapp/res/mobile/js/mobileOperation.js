@@ -279,7 +279,7 @@ function getStocksByVolatilityByMonthCallback(data) {
             }
         }
         unitTemplate += '<div style="width:100%;text-align:right;' + backgroundColor + '">';
-        unitTemplate += '<div class="left" style="width:25%;text-align:left;">' + unit.date + '(' + showWeekDay(unit.date) ')</div>';
+        unitTemplate += '<div class="left" style="width:25%;text-align:left;">' + unit.date + '(' + showWeekDay(unit.date) + ')</div>';
         unitTemplate += '<div class="left" style="width:20%;' + color + '">' + parseFloat(unit.topen).toFixed(2) + '</div>';
         unitTemplate += '<div class="left" style="width:20%;' + color + '">' + parseFloat(unit.tclose).toFixed(2) + '</div>';
         unitTemplate += '<div class="left" style="width:17%;' + color + '">' + parseFloat(unit.pchg).toFixed(2) + '%</div>';
