@@ -104,7 +104,7 @@ public class stockDataBo {
         if(!isTableExist(stockCode)){
             stockDaoImp.createNewStockTable("s"+stockCode);
             insertStockHistoryDataFromWeb(stockCode, "19900101", CommonUtils.dateAddDay(CommonUtils.getCurrentDate(), -1).replace("-",""));
-            stockDaoImp.insertStockLastDate(stockCode, "", CommonUtils.getCurrentDate("yyyyMMdd"));
+            stockDaoImp.insertStockLastDate(stockCode, "", CommonUtils.getCurrentDate());
         }
     }
 

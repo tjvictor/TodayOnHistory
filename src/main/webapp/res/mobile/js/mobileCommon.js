@@ -70,13 +70,13 @@ function showToday() {
 
 function showWeekDay(dateStr){
     var date = new Date();
-    date.setFullYear(dateStr.split('-')[0]);
-    date.setMonth(dateStr.split('-')[1]);
-    date.setDate(dateStr.split('-')[2]);
+    date.setFullYear(parseInt(dateStr.split('-')[0]));
+    date.setMonth(parseInt(dateStr.split('-')[1])-1);
+    date.setDate(parseInt(dateStr.split('-')[2]));
 
-    if (today.getDay() == 0) {
+    if (date.getDay() == 0) {
         return 7;
     }else{
-        today.getDay();
+        return date.getDay();
     }
 }

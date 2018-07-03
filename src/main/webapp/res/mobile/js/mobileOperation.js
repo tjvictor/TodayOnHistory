@@ -230,6 +230,8 @@ function calculate() {
 }
 
 function volatilityAnalyse() {
+    if($('#stockCodeTxt').val() === '')
+        return;
     var param = 'stockCode=' + $('#stockCodeTxt').val() + '&volatility=' + $('#volatilityTxt').val() + '&month=' + $('#monthTxt').val() + '&startDate=' + $('#startDateTxt').val() + '&endDate=' + $('#endDateTxt').val();
     callAjax('/websiteService/getStocksByVolatilityByMonth', '', 'getStocksByVolatilityByMonthCallback', '', '', param, '');
 }
