@@ -68,6 +68,15 @@ function showToday() {
     return date;
 }
 
-function toString(item){
-    return "'"+unit.date+"'";
+function showWeekDay(dateStr){
+    var date = new Date();
+    date.setFullYear(dateStr.split('-')[0]);
+    date.setMonth(dateStr.split('-')[1]);
+    date.setDate(dateStr.split('-')[2]);
+
+    if (today.getDay() == 0) {
+        return 7;
+    }else{
+        today.getDay();
+    }
 }
