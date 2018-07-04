@@ -39,7 +39,7 @@ public class stockSchedule {
             if(CommonUtils.dateAddDay(item.getLastDate(), 1).equals(CommonUtils.getCurrentDate())){
                 return ;
             }
-            stockBo.insertStockHistoryDataFromWeb(item.getCode(), CommonUtils.dateAddDay(item.getLastDate(), 1), CommonUtils.getCurrentDate());
+            stockBo.insertStockHistoryDataFromWeb(item.getCode(), (CommonUtils.dateAddDay(item.getLastDate(), 1)).replace("-", ""), CommonUtils.getCurrentDate("yyyyMMdd"));
             stockDaoImp.updateStockLastDate(item.getCode(), CommonUtils.getCurrentDate());
             logger.info(String.format("%s is updated to %s.", item.getCode(), CommonUtils.getCurrentDate()));
         }
