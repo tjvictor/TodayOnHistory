@@ -16,7 +16,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -25,7 +24,21 @@ public class stockDataBo {
     @Autowired
     private stockDao stockDaoImp;
 
-    private static final String STOCK_DATA_URL = "http://quotes.money.163.com/service/chddata.html?code=0%s&start=%s&end=%s&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER";
+	/*
+	SH is 0XXXXXX
+	SZ is 1XXXXXX
+	XXXXXX is stock code, like below
+
+	http://quotes.money.163.com/service/chddata.html?code=0000001&start=20100101&end=20180601&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER
+	http://quotes.money.163.com/service/chddata.html?code=0600436&start=20100101&end=20180601&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER
+
+	http://quotes.money.163.com/service/chddata.html?code=1399001&start=20100101&end=20180601&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER
+	http://quotes.money.163.com/service/chddata.html?code=1002601&start=20100101&end=20180601&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER
+	http://quotes.money.163.com/service/chddata.html?code=1300729&start=20100101&end=20180601&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER
+	http://quotes.money.163.com/service/chddata.html?code=1000049&start=20100101&end=20180601&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER
+	*/
+
+    private static final String STOCK_DATA_URL = "http://quotes.money.163.com/service/chddata.html?code=%s&start=%s&end=%s&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;VOTURNOVER;VATURNOVER";
 
     public void downloadFileFromUrl(String stockCode) throws IOException, SQLException {
 
@@ -96,20 +109,21 @@ public class stockDataBo {
 
     public boolean isTableExist(String tableName) throws SQLException {
 
-        return stockDaoImp.isTableExist("s"+tableName);
+        return stockDaoImp.isTableExist("s" + tableName);
 
     }
 
     public void initStockData(String stockCode) throws SQLException, IOException {
-        if(!isTableExist(stockCode)){
-            stockDaoImp.createNewStockTable("s"+stockCode);
-            insertStockHistoryDataFromWeb(stockCode, "19900101", CommonUtils.dateAddDay(CommonUtils.getCurrentDate(), -1).replace("-",""));
+        if (!isTableExist(stockCode)) {
+            stockDaoImp.createNewStockTable("s" + stockCode);
+            insertStockHistoryDataFromWeb(stockCode, "19900101", CommonUtils.dateAddDay(CommonUtils.getCurrentDate(), -1).replace("-", ""));
             stockDaoImp.insertStockLastDate(stockCode, "", CommonUtils.getCurrentDate());
         }
     }
 
     public void insertStockHistoryDataFromWeb(String code, String startDate, String endDate) throws IOException, SQLException {
-        URL url = new URL(String.format(STOCK_DATA_URL, code, startDate, endDate));
+        String finalCode = getFinalCode(code);
+        URL url = new URL(String.format(STOCK_DATA_URL, finalCode, startDate, endDate));
         System.setProperty("java.net.useSystemProxies", "true");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         InputStream inputStream = conn.getInputStream();
@@ -141,6 +155,23 @@ public class stockDataBo {
             }
         }
 
-        stockDaoImp.insertStockHistoryData("s"+code, stockEntityList);
+        stockDaoImp.insertStockHistoryData("s" + code, stockEntityList);
+    }
+
+    private String getFinalCode(String code) {
+        // this is for SH
+        if (code.equals("000001"))
+            return "0" + code;
+        switch (code.charAt(0)) {
+            //this is for SH
+            case '6':
+                return "0" + code;
+            //this is for SZ, such as 300, 002, 000....
+            case '3':
+            case '0':
+                return "1" + code;
+        }
+
+        return "";
     }
 }

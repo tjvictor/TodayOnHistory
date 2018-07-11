@@ -147,6 +147,17 @@ function getEventByIdCallback(data){
     }
 }
 
+function tabSelect(obj){
+    $('.sc_tabSelected').removeClass('sc_tabSelected');
+    $(obj).addClass('sc_tabSelected');
+    var market = $('.sc_tabSelected').text();
+    if(market === '深市'){
+        $('#ghslTxt').attr('disabled', 'disabled');
+    }else {
+        $('#ghslTxt').removeAttr('disabled');
+    }
+}
+
 function bsSelect(obj, param) {
     $('.sc_bs div').removeClass('sc_bsSelected');
     $(obj).addClass('sc_bsSelected');
